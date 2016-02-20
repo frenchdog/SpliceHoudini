@@ -1,0 +1,94 @@
+require Geometry;
+
+object SpliceHoudiniGeometryWrapper
+{
+    PolygonMesh polygonMesh;
+};
+
+function SpliceHoudiniGeometryWrapper.setPolygonMesh !(PolygonMesh mesh)
+{
+    this.polygonMesh = mesh;
+}
+
+function PolygonMesh SpliceHoudiniGeometryWrapper.getPolygonMesh()
+{
+    return this.polygonMesh;
+}
+
+operator setPtask(Index index, Vec3 values<>, io PolygonMesh mesh)
+{
+    mesh.setPointPosition(index, values[index]);
+}
+
+function SpliceHoudiniGeometryWrapper.setP !(Vec3 values<>)
+{
+    Size newSize = values.size();
+    if (newSize != this.polygonMesh.pointCount())
+    {
+        this.polygonMesh.clear();
+        this.polygonMesh.beginStructureChanges();
+        this.polygonMesh.createPoints(newSize);
+        this.polygonMesh.endStructureChanges();
+    }
+    setPtask <<<this.polygonMesh.pointCount()>>> (values, this.polygonMesh);
+}
+
+operator SpliceHoudiniSetUInt32PointAttributeTask(Index index, UInt32 values<>, io Ref<UInt32Attribute> attr) 
+{
+  attr.values[index] = values[index];
+}
+
+function SpliceHoudiniGeometryWrapper.setUInt32PointAttribute!(UInt32 values<>, String name)
+{
+    Ref<UInt32Attribute> attr = this.polygonMesh.getOrCreateAttribute(name, UInt32Attribute);
+    SpliceHoudiniSetUInt32PointAttributeTask <<<this.polygonMesh.pointCount()>>> (values, attr);
+    attr.incrementVersion();
+}
+
+operator SpliceHoudiniSetScalarPointAttributeTask(Index index, Scalar values<>, io Ref<ScalarAttribute> attr) 
+{
+    attr.values[index] = values[index];
+}
+
+function SpliceHoudiniGeometryWrapper.setScalarPointAttribute!(Scalar values<>, String name)
+{
+    Ref<ScalarAttribute> attr = this.polygonMesh.getOrCreateScalarAttribute( name );  
+    SpliceHoudiniSetScalarPointAttributeTask<<<this.polygonMesh.pointCount()>>>(values, attr);
+    attr.incrementVersion();
+}
+
+operator SpliceHoudiniSetVec3PointAttributeTask(Index index, Vec3 values<>, io Ref<Vec3Attribute> attr) 
+{
+    attr.values[index] = values[index];
+}
+
+function SpliceHoudiniGeometryWrapper.setVec3PointAttribute!(Vec3 values<>, String name) 
+{
+    Ref<Vec3Attribute> attr = this.polygonMesh.getOrCreateVec3Attribute( name );  
+    SpliceHoudiniSetVec3PointAttributeTask<<<this.polygonMesh.pointCount()>>>(values, attr);
+    attr.incrementVersion();
+}
+
+operator SpliceHoudiniSetVec4PointAttributeTask(Index index, Vec4 values<>, io Ref<Vec4Attribute> attr) 
+{
+    attr.values[index] = values[index];
+}
+
+function SpliceHoudiniGeometryWrapper.setVec4PointAttribute!(Vec4 values<>, String name) 
+{
+    Ref<Vec4Attribute> attr = this.polygonMesh.getOrCreateVec4Attribute( name );  
+    SpliceHoudiniSetVec4PointAttributeTask<<<this.polygonMesh.pointCount()>>>(values, attr);
+    attr.incrementVersion();
+}
+
+operator SpliceHoudiniSetColorPointAttributeTask(Index index, Color values<>, io Ref<ColorAttribute> attr) 
+{
+    attr.values[index] = values[index];
+}
+
+function SpliceHoudiniGeometryWrapper.setColorPointAttribute!(Color values<>, String name) 
+{
+    Ref<ColorAttribute> attr = this.polygonMesh.getOrCreateColorAttribute( name );  
+    SpliceHoudiniSetColorPointAttributeTask<<<this.polygonMesh.pointCount()>>>(values, attr);
+    attr.incrementVersion();
+}

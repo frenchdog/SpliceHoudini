@@ -1,0 +1,112 @@
+{
+  "objectType" : "Graph",
+  "metadata" : {
+    "timeline_start" : "1",
+    "timeline_current" : "1",
+    "timeline_end" : "50"
+    },
+  "title" : "",
+  "ports" : [
+    {
+      "metadata" : {},
+      "name" : "size",
+      "portType" : "In",
+      "typeSpec" : "Scalar"
+      },
+    {
+      "metadata" : {},
+      "name" : "detail",
+      "portType" : "In",
+      "typeSpec" : "Integer"
+      },
+    {
+      "metadata" : {},
+      "name" : "this",
+      "portType" : "Out",
+      "typeSpec" : "PolygonMesh"
+      }
+    ],
+  "extDeps" : {},
+  "nodes" : [
+    {
+      "name" : "AddTeapot",
+      "executable" : "Fabric.Exts.Geometry.PolygonMesh.AddTeapot",
+      "metadata" : {
+        "uiGraphPos" : "{\"x\": 453, \"y\": 76}"
+        },
+      "pins" : [
+        {
+          "defaultValues" : {}
+          },
+        {
+          "defaultValues" : {}
+          },
+        {
+          "defaultValues" : {}
+          },
+        {
+          "defaultValues" : {}
+          }
+        ]
+      },
+    {
+      "name" : "PolygonMesh",
+      "executable" : "Fabric.Exts.Geometry.PolygonMesh.PolygonMesh",
+      "metadata" : {
+        "uiGraphPos" : "{\"x\": 219, \"y\": 16}"
+        },
+      "pins" : [
+        {
+          "defaultValues" : {}
+          },
+        {
+          "defaultValues" : {}
+          }
+        ]
+      },
+    {
+      "name" : "Clear",
+      "executable" : "Fabric.Exts.Geometry.PolygonMesh.Clear",
+      "metadata" : {
+        "uiGraphPos" : "{\"x\": 339, \"y\": 26}"
+        },
+      "pins" : [
+        {
+          "defaultValues" : {}
+          }
+        ]
+      }
+    ],
+  "connections" : {
+    "size" : [
+      "AddTeapot.size"
+      ],
+    "detail" : [
+      "AddTeapot.detail"
+      ],
+    "AddTeapot.this" : [
+      "this"
+      ],
+    "PolygonMesh.result" : [
+      "Clear.this"
+      ],
+    "Clear.this" : [
+      "AddTeapot.this"
+      ]
+    },
+  "args" : [
+    {
+      "type" : "Float32",
+      "value" : 1
+      },
+    {
+      "type" : "SInt32",
+      "value" : 4
+      },
+    {
+      "type" : "PolygonMesh",
+      "value" : null,
+      "ext" : "Geometry"
+      }
+    ]
+  }

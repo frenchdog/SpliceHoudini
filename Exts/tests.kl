@@ -1,0 +1,49 @@
+require SpliceHoudini;
+
+operator entry() {
+
+	PolygonMesh mesh();
+	SpliceHoudiniGeometryWrapper wrapper();
+	wrapper.setPolygonMesh(mesh);
+
+	Vec3 p[];
+	p.push(Vec3(1,2,3));
+	wrapper.setP(p);
+
+	if(mesh.pointCount() != 1) report("Point count mismatch!");
+
+	UInt32 arrayUInt32[];
+	arrayUInt32.push(4);
+	wrapper.setUInt32PointAttribute(arrayUInt32, "UInt32");
+	if(!mesh.hasAttribute("UInt32")) report("No 'UInt32' attribute found");
+	Ref<UInt32Attribute> attrUInt32 = mesh.getOrCreateAttribute("UInt32", UInt32Attribute);
+	if(attrUInt32.values[0] != 4) report("'UInt32' attribute error");
+
+	Scalar arrayScalar[];
+	arrayScalar.push(5.5);
+	wrapper.setScalarPointAttribute(arrayScalar, "Scalar");
+	if(!mesh.hasAttribute("Scalar")) report("No 'Scalar' attribute found");
+	Ref<ScalarAttribute> attrScalar = mesh.getOrCreateAttribute("Scalar", ScalarAttribute);
+	if(attrScalar.values[0] != 5.5) report("'Scalar' attribute error");
+
+	Vec3 arrayVec3[];
+	arrayVec3.push(Vec3(6,7,8));
+	wrapper.setVec3PointAttribute(arrayVec3, "Vec3");
+	if(!mesh.hasAttribute("Vec3")) report("No 'Vec3' attribute found");
+	Ref<Vec3Attribute> attrVec3 = mesh.getOrCreateAttribute("Vec3", Vec3Attribute);
+	if(attrVec3.values[0] != Vec3(6,7,8)) report("'Vec3' attribute error");
+
+	Vec4 arrayVec4[];
+	arrayVec4.push(Vec4(9,10,11,12));
+	wrapper.setVec4PointAttribute(arrayVec4, "Vec4");
+	if(!mesh.hasAttribute("Vec4")) report("No 'Vec4' attribute found");
+	Ref<Vec4Attribute> attrVec4 = mesh.getOrCreateAttribute("Vec4", Vec4Attribute);
+	if(attrVec4.values[0] != Vec4(9,10,11,12)) report("'Vec4' attribute error");
+
+	Color arrayColor[];
+	arrayColor.push(Color(13,14,15));
+	wrapper.setColorPointAttribute(arrayColor, "Color");
+	if(!mesh.hasAttribute("Color")) report("No 'Color' attribute found");
+	Ref<ColorAttribute> attrColor = mesh.getOrCreateAttribute("Color", ColorAttribute);
+	if(attrColor.values[0] != Color(13,14,15)) report("'Color' attribute error");
+}

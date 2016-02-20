@@ -1,0 +1,259 @@
+{
+  "objectType" : "Graph",
+  "metadata" : {
+    "timeline_start" : "1",
+    "uiGraphZoom" : "{\"value\": 0.76025}",
+    "timeline_current" : "21",
+    "timeline_end" : "50",
+    "uiGraphPan" : "{\"x\": 160.296, \"y\": -80.913}"
+    },
+  "title" : "Octopus",
+  "ports" : [
+    {
+      "metadata" : {},
+      "name" : "timeline",
+      "portType" : "In",
+      "typeSpec" : "SInt32"
+      },
+    {
+      "metadata" : {},
+      "name" : "Path",
+      "portType" : "In",
+      "typeSpec" : "FilePath"
+      },
+    {
+      "metadata" : {},
+      "name" : "mesh",
+      "portType" : "Out",
+      "typeSpec" : "PolygonMesh"
+      }
+    ],
+  "extDeps" : {},
+  "nodes" : [
+    {
+      "name" : "String",
+      "executable" : "Fabric.Exts.FileIO.FilePath.String",
+      "metadata" : {
+        "uiGraphPos" : "{\"x\": -111.603, \"y\": 178.141}"
+        },
+      "pins" : [
+        {
+          "defaultValues" : {}
+          },
+        {
+          "defaultValues" : {}
+          }
+        ]
+      },
+    {
+      "name" : "AlembicArchiveReader",
+      "executable" : "Fabric.Exts.AlembicWrapper.AlembicArchiveReader.AlembicArchiveReader",
+      "metadata" : {
+        "uiGraphPos" : "{\"x\": 8.33013, \"y\": 221.667}"
+        },
+      "pins" : [
+        {
+          "defaultValues" : {}
+          },
+        {
+          "defaultValues" : {}
+          }
+        ]
+      },
+    {
+      "name" : "GetPathsOfType",
+      "executable" : "Fabric.Exts.AlembicWrapper.AlembicArchiveReader.GetPathsOfType",
+      "metadata" : {
+        "uiGraphPos" : "{\"x\": 172.672, \"y\": 272.674}"
+        },
+      "pins" : [
+        {
+          "defaultValues" : {}
+          },
+        {
+          "defaultValues" : {
+            "String" : "PolyMesh"
+            }
+          },
+        {
+          "defaultValues" : {}
+          }
+        ]
+      },
+    {
+      "name" : "Get",
+      "executable" : "Fabric.Core.Array.Get",
+      "metadata" : {
+        "uiGraphPos" : "{\"x\": 294.946, \"y\": 349.07}"
+        },
+      "pins" : [
+        {
+          "defaultValues" : {}
+          },
+        {
+          "defaultValues" : {}
+          },
+        {
+          "defaultValues" : {}
+          }
+        ]
+      },
+    {
+      "name" : "GetPolyMesh",
+      "executable" : "Fabric.Exts.AlembicWrapper.AlembicArchiveReader.GetPolyMesh",
+      "metadata" : {
+        "uiGraphPos" : "{\"x\": 423.727, \"y\": 292.347}"
+        },
+      "pins" : [
+        {
+          "defaultValues" : {}
+          },
+        {
+          "defaultValues" : {}
+          },
+        {
+          "defaultValues" : {}
+          }
+        ]
+      },
+    {
+      "name" : "ReadSample",
+      "executable" : "Fabric.Exts.AlembicWrapper.AlembicPolyMeshReader.ReadSample",
+      "cacheRule" : "never",
+      "metadata" : {
+        "uiGraphPos" : "{\"x\": 571.511, \"y\": 426.682}"
+        },
+      "pins" : [
+        {
+          "defaultValues" : {}
+          },
+        {
+          "defaultValues" : {
+            "Float64" : 0.3644999861717224
+            }
+          },
+        {
+          "defaultValues" : {
+            "Boolean" : false
+            }
+          },
+        {
+          "defaultValues" : {}
+          }
+        ]
+      },
+    {
+      "name" : "FrameToSeconds",
+      "definition" : {
+        "objectType" : "Function",
+        "metadata" : {},
+        "title" : "FrameToSeconds",
+        "ports" : [
+          {
+            "metadata" : {},
+            "name" : "frame",
+            "portType" : "In",
+            "typeSpec" : "SInt32"
+            },
+          {
+            "metadata" : {},
+            "name" : "fps",
+            "portType" : "In",
+            "typeSpec" : "Float32"
+            },
+          {
+            "metadata" : {},
+            "name" : "seconds",
+            "portType" : "Out",
+            "typeSpec" : "Float32"
+            }
+          ],
+        "extDeps" : {},
+        "filename" : "",
+        "code" : "dfgEntry {\n  seconds = Float32(frame) / Float32(fps);\n}\n"
+        },
+      "metadata" : {
+        "uiGraphPos" : "{\"x\": 356.539, \"y\": 469.778}"
+        },
+      "pins" : [
+        {
+          "defaultValues" : {}
+          },
+        {
+          "defaultValues" : {
+            "Float32" : 24
+            }
+          },
+        {
+          "defaultValues" : {}
+          }
+        ]
+      },
+    {
+      "name" : "PolygonMesh",
+      "executable" : "Fabric.Exts.Geometry.PolygonMesh.PolygonMesh",
+      "metadata" : {
+        "uiGraphPos" : "{\"x\": 386.734, \"y\": 614.448}"
+        },
+      "pins" : [
+        {
+          "defaultValues" : {}
+          },
+        {
+          "defaultValues" : {}
+          }
+        ]
+      }
+    ],
+  "connections" : {
+    "timeline" : [
+      "FrameToSeconds.frame"
+      ],
+    "Path" : [
+      "String.this"
+      ],
+    "String.result" : [
+      "AlembicArchiveReader.fileName"
+      ],
+    "AlembicArchiveReader.result" : [
+      "GetPathsOfType.this"
+      ],
+    "GetPathsOfType.this" : [
+      "GetPolyMesh.this"
+      ],
+    "GetPathsOfType.result" : [
+      "Get.array"
+      ],
+    "Get.element" : [
+      "GetPolyMesh.path"
+      ],
+    "GetPolyMesh.result" : [
+      "ReadSample.this"
+      ],
+    "ReadSample.mesh" : [
+      "mesh"
+      ],
+    "FrameToSeconds.seconds" : [
+      "ReadSample.time"
+      ],
+    "PolygonMesh.result" : [
+      "ReadSample.mesh"
+      ]
+    },
+  "args" : [
+    {
+      "type" : "SInt32",
+      "value" : 21
+      },
+    {
+      "type" : "FilePath",
+      "value" : null,
+      "ext" : "FileIO"
+      },
+    {
+      "type" : "PolygonMesh",
+      "value" : null,
+      "ext" : "Geometry"
+      }
+    ]
+  }

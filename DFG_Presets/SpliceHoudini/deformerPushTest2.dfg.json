@@ -1,0 +1,34 @@
+{
+  "objectType" : "Function",
+  "metadata" : {},
+  "title" : "PushPoints2",
+  "ports" : [
+    {
+      "metadata" : {},
+      "name" : "mesh",
+      "portType" : "In",
+      "typeSpec" : "PolygonMesh"
+      },
+    {
+      "metadata" : {},
+      "name" : "result",
+      "portType" : "Out",
+      "typeSpec" : "PolygonMesh"
+      },
+    {
+      "metadata" : {},
+      "name" : "push",
+      "portType" : "In",
+      "typeSpec" : "Float32"
+      },
+    {
+      "metadata" : {},
+      "name" : "translate",
+      "portType" : "In",
+      "typeSpec" : "Vec3"
+      }
+    ],
+  "extDeps" : {},
+  "filename" : "",
+  "code" : "operator deform<<<index>>>(Float32 push, Vec3 normals[], Vec3 translate, io Vec3 positions[]) {\n  Vec3 position = positions[ index ];\n  Vec3 normal = normals[index];\n\n  position += normal * push;\n  positions[index] = position + translate;\n}\n\n\ndfgEntry {\n  result = PolygonMesh(\"myCopy\");\n  result.clear();\n  result.copy(mesh);\n  Ref<Vec3Attribute> positionsAttr = result.getAttributes().getPositions();\n  Ref<Vec3Attribute> nAttr = result.getOrCreateVec3Attribute(\"N\");\n  deform<<<result.pointCount()@false>>>(push, nAttr.values, translate, positionsAttr.values);\n}\n"
+  }
